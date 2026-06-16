@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Test</title></head>
+<body>
+<h1 id="msg">Loading...</h1>
+<script>
+try {
+  document.getElementById("msg").textContent = "✅ 基础JS正常";
+  console.log("Test 1: Basic JS works");
+} catch(e) {
+  document.getElementById("msg").textContent = "❌ " + e.message;
+}
+</script>
+<script src="js/data.js"></script>
+<script>
+try {
+  var t = typeof WorldCupData;
+  var n = Object.keys(WorldCupData.teams).length;
+  var m = WorldCupData.matches.length;
+  document.getElementById("msg").textContent = "✅ data.js OK: " + n + " teams, " + m + " matches";
+  console.log("Test 2: data.js works, teams:", n, "matches:", m);
+} catch(e) {
+  document.getElementById("msg").textContent = "❌ data.js: " + e.message;
+  console.error("data.js error:", e);
+}
+</script>
+<script src="js/app.js"></script>
+<script>
+try {
+  document.getElementById("msg").textContent = "✅ app.js loaded, App type: " + typeof App;
+  console.log("Test 3: app.js loaded, App:", typeof App);
+} catch(e) {
+  document.getElementById("msg").textContent = "❌ app.js: " + e.message;
+  console.error("app.js error:", e);
+}
+</script>
+</body>
+</html>
