@@ -13,6 +13,13 @@ const App = {
     this.bindNav();
     this.bindTheme();
     this.loadPredictions();
+    this.addAdminNav();
+    
+    // Restore edit mode button state
+    if (this.editMode) {
+      const btn = document.getElementById("editModeBtn");
+      if (btn) { btn.classList.add("active"); btn.innerHTML = "✅ 完成编辑"; }
+    }
     this.navigate("home");
   },
 
@@ -72,6 +79,7 @@ const App = {
       case "news": main.innerHTML = this.newsPage(); break;
       case "stats": main.innerHTML = this.statsPage(); break;
       case "about": main.innerHTML = this.aboutPage(); break;
+      case "admin": main.innerHTML = this.adminPage(); break;
       case "compare": main.innerHTML = this.comparePage(); break;
       case "calculator": main.innerHTML = this.calcPage(); break;
       case "calendar": main.innerHTML = this.calendarPage(); break;
@@ -117,6 +125,31 @@ const App = {
         this.setCalcResult(gid, home, away, result);
       });
     });
+    // Admin tabs
+    document.querySelectorAll("#adminTabs .tab").forEach((t) => {
+      t.addEventListener("click", () => {
+        document.querySelectorAll("#adminTabs .tab").forEach((x) => x.classList.remove("active"));
+        t.classList.add("active");
+        const target = t.dataset.tab;
+        document.querySelectorAll("#adminTabs ~ .tab-panel").forEach((p) => p.style.display = "none");
+        const panel = document.getElementById("tab-" + target);
+        if (panel) panel.style.display = "block";
+      });
+    });
+    // Edit mode - add click handlers to match scores
+    if (this.editMode) {
+      document.querySelectorAll(".match-card .score").forEach((el) => {
+        el.style.cursor = "pointer";
+        el.title = "点击编辑比分";
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const card = el.closest(".match-card");
+          if (card && card.dataset.match) {
+            this.showMatchEditor(card.dataset.match);
+          }
+        });
+      });
+    }
     // Theme picker in about page
     if (document.getElementById("themePicker")) {
       document.querySelectorAll(".theme-option").forEach((o) => {
@@ -638,6 +671,13 @@ ${cats.map((c) => `<div class="tab-panel" id="tab-${c}" style="display:none"><di
     const hf = teamFlag(m.home);
     const af = teamFlag(m.away);
     let scoreDisplay = '<span class="vs">VS</span>';
+    let editBadge = "";
+    if (this.editMode) {
+      editBadge = '<span class="edit-badge">✏️</span>';
+      if (m.status === "finished" || m.status === "live") {
+        scoreDisplay = `<span style="font-size:1.8rem;font-weight:800;color:var(--gold)">${m.homeScore}</span><span style="font-size:1.2rem;margin:0 4px;color:var(--gold)">-</span><span style="font-size:1.8rem;font-weight:800;color:var(--gold)">${m.awayScore}</span>`;
+      }
+    }
     let cls = "match-card";
     if (m.status === "finished") {
       scoreDisplay = `${m.homeScore} - ${m.awayScore}`;
@@ -649,7 +689,7 @@ ${cats.map((c) => `<div class="tab-panel" id="tab-${c}" style="display:none"><di
     const gName = m.group ? `第${m.group}组` : "";
     return `<div class="${cls}" data-match="${m.id}">
   <div class="match-header">
-    <span>${m.date} ${m.time} · ${m.stadium}</span>
+    <span>${m.date} ${m.time} · ${m.stadium}${editBadge}</span>
     <span class="stage">${gName} ${m.stage}</span>
   </div>
   <div class="match-body">
@@ -1023,6 +1063,338 @@ ${cats.map((c) => `<div class="tab-panel" id="tab-${c}" style="display:none"><di
     const diff = Math.ceil((new Date("2026-06-11") - new Date()) / (86400000));
     return diff > 0 ? diff : 0;
   },
+
+
+  // ============================================================
+  // EDIT MODE - 编辑模式
+  // ============================================================
+  editMode: false,
+
+  toggleEditMode() {
+    this.editMode = !this.editMode;
+    const btn = document.getElementById("editModeBtn");
+    if (btn) {
+      btn.classList.toggle("active", this.editMode);
+      btn.innerHTML = this.editMode ? "✅ 完成编辑" : "✏️ 编辑";
+    }
+    this.render();
+  },
+
+  // ============================================================
+  // ADMIN PANEL - 管理面板
+  // ============================================================
+  adminPage() {
+    return `<div class="section-header"><h2>⚙️ 管理面板</h2></div>
+<p class="l">编辑比赛比分、状态、新闻。所有修改自动保存到浏览器。</p>
+<div class="tabs" id="adminTabs">
+  <div class="tab active" data-tab="matches">比赛管理</div>
+  <div class="tab" data-tab="scores">快速记分</div>
+  <div class="tab" data-tab="news">新闻管理</div>
+  <div class="tab" data-tab="data">数据管理</div>
+</div>
+<div class="tab-panel" id="tab-matches" style="display:block">${this.adminMatchesTable()}</div>
+<div class="tab-panel" id="tab-scores" style="display:none">${this.adminScoreBoard()}</div>
+<div class="tab-panel" id="tab-news" style="display:none">${this.adminNewsEditor()}</div>
+<div class="tab-panel" id="tab-data" style="display:none">${this.adminDataTools()}</div>`;
+  },
+
+  adminMatchesTable() {
+    const matches = WorldCupData.matches;
+    return `<div style="overflow-x:auto"><table class="group-table admin-table">
+  <tr><th>ID</th><th>日期</th><th>主队</th><th>比分</th><th>客队</th><th>状态</th><th>操作</th></tr>
+  ${matches.map(m => {
+    const hn = getTeamName(m.home);
+    const an = getTeamName(m.away);
+    const hf = teamFlag(m.home);
+    const af = teamFlag(m.away);
+    const statusOpts = ['scheduled','live','finished'].map(s =>
+      `<option ${m.status === s ? 'selected' : ''} value="${s}">${s === 'scheduled' ? '待赛' : s === 'live' ? '进行中' : '已结束'}</option>`
+    ).join('');
+    return `<tr>
+      <td style="font-size:0.75rem;color:var(--text-dim)">${m.id}</td>
+      <td style="font-size:0.78rem">${m.date}</td>
+      <td>${hf} ${hn}</td>
+      <td class="score-edit">
+        <input type="number" min="0" max="20" class="score-input" id="hs-${m.id}" value="${m.homeScore !== null ? m.homeScore : ''}" placeholder="?" style="width:36px;text-align:center">
+        <span style="color:var(--gold);font-weight:700;margin:0 3px">-</span>
+        <input type="number" min="0" max="20" class="score-input" id="as-${m.id}" value="${m.awayScore !== null ? m.awayScore : ''}" placeholder="?" style="width:36px;text-align:center">
+      </td>
+      <td>${af} ${an}</td>
+      <td>
+        <select class="status-select" id="st-${m.id}" style="font-size:0.72rem;padding:3px 6px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:4px">
+          ${statusOpts.join('')}
+        </select>
+      </td>
+      <td><button class="btn btn-small" onclick="App.saveMatchEdit('${m.id}')" style="padding:4px 10px;font-size:0.72rem">保存</button></td>
+    </tr>`;
+  }).join('')}
+</table></div>
+<div style="margin-top:12px;display:flex;gap:10px">
+  <button class="btn" onclick="App.saveAllMatches()" style="font-size:0.8rem">💾 保存所有修改</button>
+  <button class="btn btn-secondary" onclick="App.render()" style="font-size:0.8rem">🔄 刷新页面</button>
+</div>`;
+  },
+
+  adminScoreBoard() {
+    const today = new Date().toISOString().slice(0,10);
+    const todays = WorldCupData.matches.filter(m => m.date === today);
+    const recent = WorldCupData.matches.filter(m => m.date < today && m.date >= "2026-06-11").slice(-10).reverse();
+    return `<h3 style="color:var(--gold);margin-bottom:12px">📅 今日比赛 (${todays.length}场)</h3>
+<div class="card-grid card-grid-2">${todays.map(m => {
+  const hf = teamFlag(m.home); const af = teamFlag(m.away);
+  const hn = getTeamName(m.home); const an = getTeamName(m.away);
+  return `<div class="match-card" style="border-left:3px solid var(--red)">
+    <div style="display:flex;align-items:center;gap:12px;justify-content:space-between">
+      <span style="font-weight:600">${hf} ${hn}</span>
+      <div style="display:flex;align-items:center;gap:4px">
+        <input type="number" min="0" max="20" class="score-input score-input-lg" id="qs-${m.id}-h" value="${m.homeScore !== null ? m.homeScore : 0}" style="width:40px;height:36px;font-size:1.1rem;text-align:center;font-weight:700">
+        <span style="font-size:1.2rem;font-weight:800;color:var(--gold)">:</span>
+        <input type="number" min="0" max="20" class="score-input score-input-lg" id="qs-${m.id}-a" value="${m.awayScore !== null ? m.awayScore : 0}" style="width:40px;height:36px;font-size:1.1rem;text-align:center;font-weight:700">
+      </div>
+      <span style="font-weight:600">${af} ${an}</span>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:8px;justify-content:center">
+      <button class="btn btn-small" onclick="App.quickSave('${m.id}')" style="padding:4px 14px;font-size:0.78rem">💾 保存比分</button>
+      <button class="btn btn-small btn-secondary" onclick="App.quickFinish('${m.id}')" style="padding:4px 14px;font-size:0.78rem">⏱️ 结束比赛</button>
+    </div>
+  </div>`;
+}).join('')}
+${todays.length === 0 ? '<div class="empty">今日无比赛</div>' : ''}</div>
+
+<h3 style="color:var(--gold);margin:20px 0 12px">📋 最近完赛</h3>
+<div class="card-grid card-grid-2">${recent.map(m => {
+  const hf = teamFlag(m.home); const af = teamFlag(m.away);
+  const hn = getTeamName(m.home); const an = getTeamName(m.away);
+  return `<div class="match-card">
+    <div style="display:flex;align-items:center;gap:8px;justify-content:space-between">
+      <span>${hf} ${hn}</span>
+      <span style="font-size:1.3rem;font-weight:800;color:var(--gold)">${m.homeScore}:${m.awayScore}</span>
+      <span>${af} ${an}</span>
+    </div>
+    <div style="font-size:0.72rem;color:var(--text-dim);text-align:center;margin-top:4px">${m.date} · ${m.stadium}</div>
+  </div>`;
+}).join('')}
+${recent.length === 0 ? '<div class="empty">暂无可显示的比赛</div>' : ''}</div>`;
+  },
+
+  adminNewsEditor() {
+    const news = getNews();
+    return `<h3 style="color:var(--gold);margin-bottom:12px">📰 添加新闻</h3>
+<div style="background:var(--card);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:20px">
+  <input id="newsTitle" placeholder="新闻标题" style="width:100%;padding:10px 14px;margin-bottom:8px;background:var(--secondary);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.88rem">
+  <input id="newsSummary" placeholder="摘要" style="width:100%;padding:10px 14px;margin-bottom:8px;background:var(--secondary);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.82rem">
+  <textarea id="newsContent" placeholder="正文内容" rows="4" style="width:100%;padding:10px 14px;margin-bottom:8px;background:var(--secondary);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.82rem;resize:vertical"></textarea>
+  <div style="display:flex;gap:8px">
+    <input id="newsCategory" placeholder="分类（如: 赛事综述）" style="flex:1;padding:8px 14px;background:var(--secondary);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.82rem">
+    <button class="btn" onclick="App.saveNews()" style="padding:8px 20px;font-size:0.82rem">📰 发布</button>
+  </div>
+</div>
+<h3 style="color:var(--gold);margin-bottom:12px">已有新闻 (${news.length}条)</h3>
+<div class="card-grid card-grid-2">${news.map((n, i) => `<div class="news-card" style="position:relative">
+  <span class="category">${n.category}</span>
+  <h3>${n.title}</h3>
+  <p>${n.summary}</p>
+  <div class="date">${n.date}</div>
+</div>`).join('')}</div>`;
+  },
+
+  adminDataTools() {
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+  <div class="match-card no-click" style="cursor:default">
+    <h3 style="color:var(--gold);margin-bottom:10px">📤 导出数据</h3>
+    <p class="l">导出所有比赛比分和状态为 JSON</p>
+    <button class="btn" onclick="App.exportData()" style="font-size:0.82rem">📤 导出</button>
+  </div>
+  <div class="match-card no-click" style="cursor:default">
+    <h3 style="color:var(--gold);margin-bottom:10px">📥 导入数据</h3>
+    <p class="l">从 JSON 文件导入数据</p>
+    <textarea id="importData" placeholder="粘贴 JSON 数据..." rows="4" style="width:100%;padding:8px;margin-bottom:8px;background:var(--secondary);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.78rem;font-family:monospace"></textarea>
+    <button class="btn btn-secondary" onclick="App.importData()" style="font-size:0.82rem">📥 导入</button>
+  </div>
+  <div class="match-card no-click" style="cursor:default">
+    <h3 style="color:var(--gold);margin-bottom:10px">🔄 重置数据</h3>
+    <p class="l">重置所有数据到初始状态</p>
+    <button class="btn btn-danger" onclick="App.resetData()" style="font-size:0.82rem">⚠️ 重置</button>
+  </div>
+  <div class="match-card no-click" style="cursor:default">
+    <h3 style="color:var(--gold);margin-bottom:10px">⚡ 操作提示</h3>
+    <p class="l" style="line-height:1.8">• 编辑模式：在页面任何比赛卡片上直接编辑比分<br>
+    • 管理面板：集中管理所有比赛<br>
+    • 所有修改自动保存到浏览器<br>
+    • 关闭浏览器或刷新页面不会丢失数据</p>
+  </div>
+</div>`;
+  },
+
+  saveMatchEdit(id) {
+    const hs = parseInt(document.getElementById('hs-' + id).value);
+    const as = parseInt(document.getElementById('as-' + id).value);
+    const st = document.getElementById('st-' + id).value;
+    if (isNaN(hs) || isNaN(as)) { alert('请输入有效比分'); return; }
+    DataManager.updateMatch(id, st, hs, as);
+    this.showToast('已保存: ' + id);
+    this.adminPage();
+    this.render();
+  },
+
+  saveAllMatches() {
+    let n = 0;
+    WorldCupData.matches.forEach(m => {
+      const hsEl = document.getElementById('hs-' + m.id);
+      const asEl = document.getElementById('as-' + m.id);
+      const stEl = document.getElementById('st-' + m.id);
+      if (hsEl && asEl && stEl) {
+        const hs = parseInt(hsEl.value);
+        const as = parseInt(asEl.value);
+        if (!isNaN(hs) && !isNaN(as)) {
+          DataManager.updateMatch(m.id, stEl.value, hs, as);
+          n++;
+        }
+      }
+    });
+    this.showToast('已保存 ' + n + ' 场比赛');
+    this.render();
+  },
+
+  quickSave(id) {
+    const h = parseInt(document.getElementById('qs-' + id + '-h').value);
+    const a = parseInt(document.getElementById('qs-' + id + '-a').value);
+    if (isNaN(h) || isNaN(a)) { alert('请输入有效比分'); return; }
+    DataManager.updateMatch(id, 'live', h, a);
+    this.showToast('已保存 ' + id + ' 比分: ' + h + '-' + a);
+    this.render();
+  },
+
+  quickFinish(id) {
+    const h = parseInt(document.getElementById('qs-' + id + '-h').value);
+    const a = parseInt(document.getElementById('qs-' + id + '-a').value);
+    if (isNaN(h) || isNaN(a)) { alert('请输入有效比分'); return; }
+    DataManager.updateMatch(id, 'finished', h, a);
+    this.showToast('比赛结束: ' + id + ' ' + h + '-' + a);
+    this.render();
+  },
+
+  saveNews() {
+    const title = document.getElementById('newsTitle').value.trim();
+    const summary = document.getElementById('newsSummary').value.trim();
+    const content = document.getElementById('newsContent').value.trim();
+    const category = document.getElementById('newsCategory').value.trim() || '最新消息';
+    if (!title) { alert('请输入标题'); return; }
+    const newItem = {
+      id: 'n' + Date.now(),
+      title, summary, content, category,
+      date: new Date().toISOString().slice(0,10),
+      image: null
+    };
+    DataManager.addNews(newItem);
+    this.showToast('新闻已发布');
+    this.render();
+  },
+
+  exportData() {
+    const json = DataManager.exportJSON();
+    const blob = new Blob([json], {type: 'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'wc2026_data_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    this.showToast('已导出');
+  },
+
+  importData() {
+    const json = document.getElementById('importData').value;
+    if (!json) { alert('请粘贴要导入的 JSON 数据'); return; }
+    try {
+      const updates = JSON.parse(json);
+      if (!Array.isArray(updates)) { alert('格式错误：需要数组'); return; }
+      let n = 0;
+      updates.forEach(u => {
+        const m = WorldCupData.matches.find(x => x.id === u.id);
+        if (m) {
+          if (u.status) m.status = u.status;
+          if (u.homeScore !== undefined) m.homeScore = u.homeScore;
+          if (u.awayScore !== undefined) m.awayScore = u.awayScore;
+          n++;
+        }
+      });
+      DataManager.save();
+      this.showToast('已导入 ' + n + ' 场更新');
+      this.render();
+    } catch(e) {
+      alert('JSON 解析错误: ' + e.message);
+    }
+  },
+
+  resetData() {
+    if (confirm('确定要重置所有数据吗？此操作不可撤销！')) {
+      DataManager.reset();
+    }
+  },
+
+  // ============================================================
+  // MATCH CARD EDIT MODE OVERLAY
+  // ============================================================
+
+  showMatchEditor(id) {
+    const m = WorldCupData.matches.find(x => x.id === id);
+    if (!m) return;
+    document.getElementById("matchModalContent").innerHTML = `
+      <h2 style="margin-bottom:16px">⚽ 编辑比分: ${teamFlag(m.home)} ${getTeamName(m.home)} vs ${getTeamName(m.away)} ${teamFlag(m.away)}</h2>
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin:20px 0">
+        <div style="text-align:center">
+          <div style="font-size:2.5rem;margin-bottom:4px">${teamFlag(m.home)}</div>
+          <div style="font-weight:600">${getTeamName(m.home)}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="number" min="0" max="20" id="edit-hs" value="${m.homeScore !== null ? m.homeScore : 0}" style="width:60px;height:50px;font-size:1.6rem;text-align:center;background:var(--secondary);border:2px solid var(--gold);border-radius:8px;color:var(--gold);font-weight:800">
+          <span style="font-size:2rem;font-weight:800;color:var(--text-dim)">:</span>
+          <input type="number" min="0" max="20" id="edit-as" value="${m.awayScore !== null ? m.awayScore : 0}" style="width:60px;height:50px;font-size:1.6rem;text-align:center;background:var(--secondary);border:2px solid var(--gold);border-radius:8px;color:var(--gold);font-weight:800">
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:2.5rem;margin-bottom:4px">${teamFlag(m.away)}</div>
+          <div style="font-weight:600">${getTeamName(m.away)}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn" onclick="App.confirmEdit('${m.id}')" style="padding:10px 24px">💾 保存比分</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('edit-hs').value='0';document.getElementById('edit-as').value='0';DataManager.updateMatch('${m.id}','finished',0,0);App.showToast('0-0 已保存');closeMatchModal();App.render()">🔄 设为0-0</button>
+        <button class="btn btn-secondary" onclick="App.showToast('已取消');closeMatchModal()">取消</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+        <button class="btn btn-secondary" onclick="DataManager.updateMatch('${m.id}','live',${m.homeScore !== null ? m.homeScore : 0},${m.awayScore !== null ? m.awayScore : 0});App.showToast('标记为进行中');closeMatchModal();App.render()" style="font-size:0.78rem">🔴 进行中</button>
+        <button class="btn btn-secondary" onclick="DataManager.updateMatch('${m.id}','scheduled',null,null);App.showToast('标记为待赛');closeMatchModal();App.render()" style="font-size:0.78rem">📅 待赛</button>
+      </div>
+    `;
+    document.getElementById("matchModal").classList.add("show");
+  },
+
+  confirmEdit(id) {
+    const h = parseInt(document.getElementById('edit-hs').value);
+    const a = parseInt(document.getElementById('edit-as').value);
+    if (isNaN(h) || isNaN(a)) { alert('请输入有效比分'); return; }
+    DataManager.updateMatch(id, 'finished', h, a);
+    this.showToast('比分已保存: ' + h + '-' + a);
+    closeMatchModal();
+    this.render();
+  },
+
+  // ============================================================
+  // TOAST NOTIFICATION
+  // ============================================================
+  showToast(msg) {
+    let t = document.getElementById('toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'toast';
+      t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--primary);padding:12px 28px;border-radius:30px;font-weight:700;font-size:0.88rem;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,0.4);transition:all .3s;opacity:0';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2500);
+  }
 };
 
 function closeNewsModal() { document.getElementById("newsModal").classList.remove("show"); }

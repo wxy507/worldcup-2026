@@ -235,78 +235,78 @@ const WorldCupData = {
     },
   },
   matches: [
-    {id:"A1",group:"A",date:"2026-06-11",time:"18:00",home:"MEX",away:"GER",stadium:"阿兹特克体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"A2",group:"A",date:"2026-06-12",time:"15:00",home:"MAR",away:"PAR",stadium:"瓜达拉哈拉体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"A3",group:"A",date:"2026-06-16",time:"18:00",home:"MEX",away:"MAR",stadium:"阿兹特克体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"A4",group:"A",date:"2026-06-17",time:"15:00",home:"GER",away:"PAR",stadium:"蒙特雷体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"A5",group:"A",date:"2026-06-21",time:"18:00",home:"GER",away:"MAR",stadium:"蒙特雷体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"A6",group:"A",date:"2026-06-21",time:"15:00",home:"PAR",away:"MEX",stadium:"阿兹特克体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"B1",group:"B",date:"2026-06-12",time:"18:00",home:"BRA",away:"KOR",stadium:"索菲体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"B2",group:"B",date:"2026-06-13",time:"15:00",home:"SEN",away:"NZL",stadium:"BC广场体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"B3",group:"B",date:"2026-06-17",time:"18:00",home:"BRA",away:"SEN",stadium:"索菲体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"B4",group:"B",date:"2026-06-18",time:"15:00",home:"KOR",away:"NZL",stadium:"BC广场体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"B5",group:"B",date:"2026-06-22",time:"18:00",home:"KOR",away:"SEN",stadium:"BC广场体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"B6",group:"B",date:"2026-06-22",time:"15:00",home:"NZL",away:"BRA",stadium:"索菲体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"C1",group:"C",date:"2026-06-13",time:"18:00",home:"ARG",away:"IRN",stadium:"纪念碑体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"C2",group:"C",date:"2026-06-14",time:"15:00",home:"NGA",away:"CRO",stadium:"马拉卡纳体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"C3",group:"C",date:"2026-06-18",time:"18:00",home:"ARG",away:"NGA",stadium:"纪念碑体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"C4",group:"C",date:"2026-06-19",time:"15:00",home:"IRN",away:"CRO",stadium:"国家体育场（利马）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"C5",group:"C",date:"2026-06-23",time:"18:00",home:"IRN",away:"NGA",stadium:"国家体育场（利马）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"C6",group:"C",date:"2026-06-23",time:"15:00",home:"CRO",away:"ARG",stadium:"纪念碑体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"D1",group:"D",date:"2026-06-14",time:"18:00",home:"FRA",away:"AUS",stadium:"法兰西体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"D2",group:"D",date:"2026-06-15",time:"15:00",home:"PER",away:"DEN",stadium:"国家体育场（利马）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"D3",group:"D",date:"2026-06-19",time:"18:00",home:"FRA",away:"PER",stadium:"法兰西体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"D4",group:"D",date:"2026-06-20",time:"15:00",home:"AUS",away:"DEN",stadium:"悉尼奥林匹克体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"D5",group:"D",date:"2026-06-24",time:"18:00",home:"AUS",away:"PER",stadium:"悉尼奥林匹克体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"D6",group:"D",date:"2026-06-24",time:"15:00",home:"DEN",away:"FRA",stadium:"法兰西体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"E1",group:"E",date:"2026-06-15",time:"18:00",home:"ENG",away:"USA",stadium:"温布利体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"E2",group:"E",date:"2026-06-16",time:"15:00",home:"TUN",away:"UKR",stadium:"突尼斯奥林匹克体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"E3",group:"E",date:"2026-06-20",time:"18:00",home:"ENG",away:"TUN",stadium:"温布利体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"E4",group:"E",date:"2026-06-21",time:"15:00",home:"USA",away:"UKR",stadium:"大都会体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"E5",group:"E",date:"2026-06-25",time:"18:00",home:"USA",away:"TUN",stadium:"大都会体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"E6",group:"E",date:"2026-06-25",time:"15:00",home:"UKR",away:"ENG",stadium:"奥林匹克体育场（基辅）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"F1",group:"F",date:"2026-06-16",time:"20:00",home:"ESP",away:"JPN",stadium:"伯纳乌体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"F2",group:"F",date:"2026-06-17",time:"15:00",home:"CMR",away:"SUI",stadium:"奥姆尼体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"F3",group:"F",date:"2026-06-21",time:"20:00",home:"ESP",away:"CMR",stadium:"伯纳乌体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"F4",group:"F",date:"2026-06-22",time:"15:00",home:"JPN",away:"SUI",stadium:"国立竞技场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"F5",group:"F",date:"2026-06-26",time:"20:00",home:"JPN",away:"CMR",stadium:"国立竞技场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"F6",group:"F",date:"2026-06-26",time:"15:00",home:"SUI",away:"ESP",stadium:"圣雅各布公园球场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"G1",group:"G",date:"2026-06-13",time:"20:00",home:"POR",away:"COL",stadium:"光明体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"G2",group:"G",date:"2026-06-14",time:"15:00",home:"EGY",away:"SVK",stadium:"开罗国际体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"G3",group:"G",date:"2026-06-18",time:"20:00",home:"POR",away:"EGY",stadium:"光明体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"G4",group:"G",date:"2026-06-19",time:"15:00",home:"COL",away:"SVK",stadium:"大都会体育场（巴兰基亚）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"G5",group:"G",date:"2026-06-23",time:"20:00",home:"COL",away:"EGY",stadium:"大都会体育场（巴兰基亚）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"G6",group:"G",date:"2026-06-23",time:"15:00",home:"SVK",away:"POR",stadium:"塔特拉体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"H1",group:"H",date:"2026-06-14",time:"20:00",home:"NED",away:"URU",stadium:"克鲁伊夫竞技场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"H2",group:"H",date:"2026-06-15",time:"15:00",home:"ALG",away:"IRQ",stadium:"1962年7月5日体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"H3",group:"H",date:"2026-06-19",time:"20:00",home:"NED",away:"ALG",stadium:"克鲁伊夫竞技场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"H4",group:"H",date:"2026-06-20",time:"15:00",home:"URU",away:"IRQ",stadium:"百年纪念体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"H5",group:"H",date:"2026-06-24",time:"20:00",home:"URU",away:"ALG",stadium:"百年纪念体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"H6",group:"H",date:"2026-06-24",time:"15:00",home:"IRQ",away:"NED",stadium:"巴士拉国际体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"I1",group:"I",date:"2026-06-12",time:"20:00",home:"ITA",away:"CRC",stadium:"罗马奥林匹克体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"I2",group:"I",date:"2026-06-13",time:"15:00",home:"GHA",away:"POL",stadium:"阿克拉体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"I3",group:"I",date:"2026-06-17",time:"20:00",home:"ITA",away:"GHA",stadium:"罗马奥林匹克体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"I4",group:"I",date:"2026-06-18",time:"15:00",home:"CRC",away:"POL",stadium:"国家体育场（圣何塞）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"I5",group:"I",date:"2026-06-22",time:"20:00",home:"CRC",away:"GHA",stadium:"国家体育场（圣何塞）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"I6",group:"I",date:"2026-06-22",time:"15:00",home:"POL",away:"ITA",stadium:"国家体育场（华沙）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"J1",group:"J",date:"2026-06-15",time:"20:00",home:"BEL",away:"KSA",stadium:"博杜安国王体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"J2",group:"J",date:"2026-06-16",time:"15:00",home:"ECU",away:"HUN",stadium:"基多体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"J3",group:"J",date:"2026-06-20",time:"20:00",home:"BEL",away:"ECU",stadium:"博杜安国王体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"J4",group:"J",date:"2026-06-21",time:"15:00",home:"KSA",away:"HUN",stadium:"阿卜杜拉国王体育城",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"J5",group:"J",date:"2026-06-25",time:"20:00",home:"KSA",away:"ECU",stadium:"阿卜杜拉国王体育城",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"J6",group:"J",date:"2026-06-25",time:"15:00",home:"HUN",away:"BEL",stadium:"普斯卡什竞技场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"K1",group:"K",date:"2026-06-11",time:"20:00",home:"CAN",away:"CIV",stadium:"BMO体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"K2",group:"K",date:"2026-06-12",time:"15:00",home:"SRB",away:"QAT",stadium:"红星体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"K3",group:"K",date:"2026-06-16",time:"20:00",home:"CAN",away:"SRB",stadium:"BMO体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"K4",group:"K",date:"2026-06-17",time:"15:00",home:"CIV",away:"QAT",stadium:"瓦塔拉体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"K5",group:"K",date:"2026-06-21",time:"20:00",home:"CIV",away:"SRB",stadium:"瓦塔拉体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"K6",group:"K",date:"2026-06-21",time:"15:00",home:"QAT",away:"CAN",stadium:"卢赛尔体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"L1",group:"L",date:"2026-06-11",time:"15:00",home:"NOR",away:"CHI",stadium:"乌勒瓦尔体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"L2",group:"L",date:"2026-06-12",time:"15:00",home:"SWE",away:"WAL",stadium:"朋友体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"L3",group:"L",date:"2026-06-16",time:"15:00",home:"NOR",away:"SWE",stadium:"乌勒瓦尔体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"L4",group:"L",date:"2026-06-17",time:"15:00",home:"CHI",away:"WAL",stadium:"国家体育场（圣地亚哥）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"L5",group:"L",date:"2026-06-21",time:"15:00",home:"CHI",away:"SWE",stadium:"国家体育场（圣地亚哥）",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
-    {id:"L6",group:"L",date:"2026-06-21",time:"15:00",home:"WAL",away:"NOR",stadium:"千禧体育场",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"A1",group:"A",date:"2026-06-11",time:"18:00",home:"MEX",away:"GER",stadium:"Estadio Azteca (墨西哥城)",stage:"小组赛",status:"finished",homeScore:2,awayScore:2},
+    {id:"A2",group:"A",date:"2026-06-12",time:"15:00",home:"MAR",away:"PAR",stadium:"Estadio BBVA (蒙特雷)",stage:"小组赛",status:"finished",homeScore:3,awayScore:1},
+    {id:"A3",group:"A",date:"2026-06-16",time:"18:00",home:"MEX",away:"MAR",stadium:"Estadio Akron (瓜达拉哈拉)",stage:"小组赛",status:"finished",homeScore:1,awayScore:2},
+    {id:"A4",group:"A",date:"2026-06-17",time:"15:00",home:"GER",away:"PAR",stadium:"Estadio Azteca (墨西哥城)",stage:"小组赛",status:"live",homeScore:0,awayScore:0},
+    {id:"A5",group:"A",date:"2026-06-21",time:"18:00",home:"GER",away:"MAR",stadium:"Estadio BBVA (蒙特雷)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"A6",group:"A",date:"2026-06-21",time:"15:00",home:"PAR",away:"MEX",stadium:"Estadio Akron (瓜达拉哈拉)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"B1",group:"B",date:"2026-06-12",time:"18:00",home:"BRA",away:"KOR",stadium:"SoFi体育场 (洛杉矶)",stage:"小组赛",status:"finished",homeScore:3,awayScore:1},
+    {id:"B2",group:"B",date:"2026-06-13",time:"15:00",home:"SEN",away:"NZL",stadium:"李维斯体育场 (旧金山)",stage:"小组赛",status:"finished",homeScore:1,awayScore:1},
+    {id:"B3",group:"B",date:"2026-06-17",time:"18:00",home:"BRA",away:"SEN",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"live",homeScore:0,awayScore:1},
+    {id:"B4",group:"B",date:"2026-06-18",time:"15:00",home:"KOR",away:"NZL",stadium:"SoFi体育场 (洛杉矶)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"B5",group:"B",date:"2026-06-22",time:"18:00",home:"KOR",away:"SEN",stadium:"李维斯体育场 (旧金山)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"B6",group:"B",date:"2026-06-22",time:"15:00",home:"NZL",away:"BRA",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"C1",group:"C",date:"2026-06-13",time:"18:00",home:"ARG",away:"IRN",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"finished",homeScore:2,awayScore:1},
+    {id:"C2",group:"C",date:"2026-06-14",time:"15:00",home:"NGA",away:"CRO",stadium:"BC Place (温哥华)",stage:"小组赛",status:"finished",homeScore:1,awayScore:2},
+    {id:"C3",group:"C",date:"2026-06-18",time:"18:00",home:"ARG",away:"NGA",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"C4",group:"C",date:"2026-06-19",time:"15:00",home:"IRN",away:"CRO",stadium:"BC Place (温哥华)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"C5",group:"C",date:"2026-06-23",time:"18:00",home:"IRN",away:"NGA",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"C6",group:"C",date:"2026-06-23",time:"15:00",home:"CRO",away:"ARG",stadium:"BC Place (温哥华)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"D1",group:"D",date:"2026-06-14",time:"18:00",home:"FRA",away:"AUS",stadium:"AT&T体育场 (达拉斯)",stage:"小组赛",status:"finished",homeScore:2,awayScore:2},
+    {id:"D2",group:"D",date:"2026-06-15",time:"15:00",home:"PER",away:"DEN",stadium:"NRG体育场 (休斯顿)",stage:"小组赛",status:"finished",homeScore:1,awayScore:1},
+    {id:"D3",group:"D",date:"2026-06-19",time:"18:00",home:"FRA",away:"PER",stadium:"箭头体育场 (堪萨斯城)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"D4",group:"D",date:"2026-06-20",time:"15:00",home:"AUS",away:"DEN",stadium:"AT&T体育场 (达拉斯)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"D5",group:"D",date:"2026-06-24",time:"18:00",home:"AUS",away:"PER",stadium:"NRG体育场 (休斯顿)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"D6",group:"D",date:"2026-06-24",time:"15:00",home:"DEN",away:"FRA",stadium:"箭头体育场 (堪萨斯城)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"E1",group:"E",date:"2026-06-15",time:"18:00",home:"ENG",away:"USA",stadium:"NRG体育场 (休斯顿)",stage:"小组赛",status:"finished",homeScore:2,awayScore:2},
+    {id:"E2",group:"E",date:"2026-06-16",time:"15:00",home:"TUN",away:"UKR",stadium:"箭头体育场 (堪萨斯城)",stage:"小组赛",status:"finished",homeScore:1,awayScore:1},
+    {id:"E3",group:"E",date:"2026-06-20",time:"18:00",home:"ENG",away:"TUN",stadium:"NRG体育场 (休斯顿)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"E4",group:"E",date:"2026-06-21",time:"15:00",home:"USA",away:"UKR",stadium:"箭头体育场 (堪萨斯城)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"E5",group:"E",date:"2026-06-25",time:"18:00",home:"USA",away:"TUN",stadium:"NRG体育场 (休斯顿)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"E6",group:"E",date:"2026-06-25",time:"15:00",home:"UKR",away:"ENG",stadium:"箭头体育场 (堪萨斯城)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"F1",group:"F",date:"2026-06-16",time:"20:00",home:"ESP",away:"JPN",stadium:"硬石体育场 (迈阿密)",stage:"小组赛",status:"finished",homeScore:3,awayScore:1},
+    {id:"F2",group:"F",date:"2026-06-17",time:"15:00",home:"CMR",away:"SUI",stadium:"BMO体育场 (多伦多)",stage:"小组赛",status:"live",homeScore:0,awayScore:1},
+    {id:"F3",group:"F",date:"2026-06-21",time:"20:00",home:"ESP",away:"CMR",stadium:"硬石体育场 (迈阿密)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"F4",group:"F",date:"2026-06-22",time:"15:00",home:"JPN",away:"SUI",stadium:"BMO体育场 (多伦多)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"F5",group:"F",date:"2026-06-26",time:"20:00",home:"JPN",away:"CMR",stadium:"硬石体育场 (迈阿密)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"F6",group:"F",date:"2026-06-26",time:"15:00",home:"SUI",away:"ESP",stadium:"BMO体育场 (多伦多)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"G1",group:"G",date:"2026-06-13",time:"20:00",home:"POR",away:"COL",stadium:"大都会体育场 (纽约)",stage:"小组赛",status:"finished",homeScore:0,awayScore:1},
+    {id:"G2",group:"G",date:"2026-06-14",time:"15:00",home:"EGY",away:"SVK",stadium:"林肯金融体育场 (费城)",stage:"小组赛",status:"finished",homeScore:0,awayScore:1},
+    {id:"G3",group:"G",date:"2026-06-18",time:"20:00",home:"POR",away:"EGY",stadium:"大都会体育场 (纽约)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"G4",group:"G",date:"2026-06-19",time:"15:00",home:"COL",away:"SVK",stadium:"林肯金融体育场 (费城)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"G5",group:"G",date:"2026-06-23",time:"20:00",home:"COL",away:"EGY",stadium:"大都会体育场 (纽约)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"G6",group:"G",date:"2026-06-23",time:"15:00",home:"SVK",away:"POR",stadium:"林肯金融体育场 (费城)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"H1",group:"H",date:"2026-06-14",time:"20:00",home:"NED",away:"URU",stadium:"吉列体育场 (波士顿)",stage:"小组赛",status:"finished",homeScore:0,awayScore:1},
+    {id:"H2",group:"H",date:"2026-06-15",time:"15:00",home:"ALG",away:"IRQ",stadium:"Estadio Akron (瓜达拉哈拉)",stage:"小组赛",status:"finished",homeScore:3,awayScore:1},
+    {id:"H3",group:"H",date:"2026-06-19",time:"20:00",home:"NED",away:"ALG",stadium:"吉列体育场 (波士顿)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"H4",group:"H",date:"2026-06-20",time:"15:00",home:"URU",away:"IRQ",stadium:"Estadio Akron (瓜达拉哈拉)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"H5",group:"H",date:"2026-06-24",time:"20:00",home:"URU",away:"ALG",stadium:"吉列体育场 (波士顿)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"H6",group:"H",date:"2026-06-24",time:"15:00",home:"IRQ",away:"NED",stadium:"Estadio Akron (瓜达拉哈拉)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"I1",group:"I",date:"2026-06-12",time:"20:00",home:"ITA",away:"CRC",stadium:"Estadio Azteca (墨西哥城)",stage:"小组赛",status:"finished",homeScore:2,awayScore:1},
+    {id:"I2",group:"I",date:"2026-06-13",time:"15:00",home:"GHA",away:"POL",stadium:"Estadio BBVA (蒙特雷)",stage:"小组赛",status:"finished",homeScore:2,awayScore:1},
+    {id:"I3",group:"I",date:"2026-06-17",time:"20:00",home:"ITA",away:"GHA",stadium:"Estadio Akron (瓜达拉哈拉)",stage:"小组赛",status:"live",homeScore:0,awayScore:0},
+    {id:"I4",group:"I",date:"2026-06-18",time:"15:00",home:"CRC",away:"POL",stadium:"Estadio Azteca (墨西哥城)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"I5",group:"I",date:"2026-06-22",time:"20:00",home:"CRC",away:"GHA",stadium:"Estadio BBVA (蒙特雷)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"I6",group:"I",date:"2026-06-22",time:"15:00",home:"POL",away:"ITA",stadium:"Estadio Akron (瓜达拉哈拉)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"J1",group:"J",date:"2026-06-15",time:"20:00",home:"BEL",away:"KSA",stadium:"SoFi体育场 (洛杉矶)",stage:"小组赛",status:"finished",homeScore:0,awayScore:1},
+    {id:"J2",group:"J",date:"2026-06-16",time:"15:00",home:"ECU",away:"HUN",stadium:"李维斯体育场 (旧金山)",stage:"小组赛",status:"finished",homeScore:2,awayScore:1},
+    {id:"J3",group:"J",date:"2026-06-20",time:"20:00",home:"BEL",away:"ECU",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"J4",group:"J",date:"2026-06-21",time:"15:00",home:"KSA",away:"HUN",stadium:"SoFi体育场 (洛杉矶)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"J5",group:"J",date:"2026-06-25",time:"20:00",home:"KSA",away:"ECU",stadium:"李维斯体育场 (旧金山)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"J6",group:"J",date:"2026-06-25",time:"15:00",home:"HUN",away:"BEL",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"K1",group:"K",date:"2026-06-11",time:"20:00",home:"CAN",away:"CIV",stadium:"BC Place (温哥华)",stage:"小组赛",status:"finished",homeScore:1,awayScore:1},
+    {id:"K2",group:"K",date:"2026-06-12",time:"15:00",home:"SRB",away:"QAT",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"finished",homeScore:3,awayScore:1},
+    {id:"K3",group:"K",date:"2026-06-16",time:"20:00",home:"CAN",away:"SRB",stadium:"BC Place (温哥华)",stage:"小组赛",status:"finished",homeScore:1,awayScore:2},
+    {id:"K4",group:"K",date:"2026-06-17",time:"15:00",home:"CIV",away:"QAT",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"live",homeScore:1,awayScore:0},
+    {id:"K5",group:"K",date:"2026-06-21",time:"20:00",home:"CIV",away:"SRB",stadium:"BC Place (温哥华)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"K6",group:"K",date:"2026-06-21",time:"15:00",home:"QAT",away:"CAN",stadium:"流明体育场 (西雅图)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"L1",group:"L",date:"2026-06-11",time:"15:00",home:"NOR",away:"CHI",stadium:"AT&T体育场 (达拉斯)",stage:"小组赛",status:"finished",homeScore:1,awayScore:1},
+    {id:"L2",group:"L",date:"2026-06-12",time:"15:00",home:"SWE",away:"WAL",stadium:"NRG体育场 (休斯顿)",stage:"小组赛",status:"finished",homeScore:1,awayScore:1},
+    {id:"L3",group:"L",date:"2026-06-16",time:"15:00",home:"NOR",away:"SWE",stadium:"箭头体育场 (堪萨斯城)",stage:"小组赛",status:"finished",homeScore:1,awayScore:1},
+    {id:"L4",group:"L",date:"2026-06-17",time:"15:00",home:"CHI",away:"WAL",stadium:"AT&T体育场 (达拉斯)",stage:"小组赛",status:"live",homeScore:1,awayScore:0},
+    {id:"L5",group:"L",date:"2026-06-21",time:"15:00",home:"CHI",away:"SWE",stadium:"NRG体育场 (休斯顿)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
+    {id:"L6",group:"L",date:"2026-06-21",time:"15:00",home:"WAL",away:"NOR",stadium:"箭头体育场 (堪萨斯城)",stage:"小组赛",status:"scheduled",homeScore:null,awayScore:null},
   ],
   news: [
     {id:"n1",title:"2026年世界杯开幕在即！美加墨三国的世纪盛会",summary:"第23届世界杯将由美国、加拿大和墨西哥联合主办，这是历史上首次由三个国家联合举办的世界杯赛事。",content:"2026年世界杯即将拉开帷幕，这是世界杯扩军至48支球队后的首届赛事。美国、加拿大和墨西哥三国联合主办，将在16个城市举办104场比赛。本届世界杯的口号是'We Are 2026'，吉祥物为'梦想之翼'。",image:null,date:"2026-06-10",category:"赛事综述"},
@@ -346,3 +346,77 @@ function getGroupData(gid) { return WorldCupData.groups.find(g => g.id === gid);
 function getTeamFromGroup(gid, idx) { return WorldCupData.groups.find(g => g.id === gid).teams[idx]; }
 function getMatches(filter) { if (filter) return WorldCupData.matches.filter(filter); return WorldCupData.matches; }
 function getNews() { return WorldCupData.news; }
+
+
+// ============================================================
+// DataManager - 数据持久化管理器
+// 所有比赛比分修改自动保存到 localStorage
+// ============================================================
+
+// ============================================================
+// DataManager - 数据持久化管理器
+// 所有比分修改自动保存到浏览器 localStorage
+// ============================================================
+const DataManager = {
+  init() {
+    try {
+      const saved = localStorage.getItem('wc2026_saved');
+      if (saved) {
+        const updates = JSON.parse(saved);
+        let n = 0;
+        updates.forEach(u => {
+          const m = WorldCupData.matches.find(x => x.id === u.id);
+          if (m) { m.status = u.status; m.homeScore = u.homeScore; m.awayScore = u.awayScore; n++; }
+        });
+        console.log('DataManager: 已加载 ' + n + ' 场更新');
+        if (n > 0) App && App.updateHeaderCounts && App.updateHeaderCounts();
+        this._lastSave = updates;
+        return;
+      }
+    } catch(e) {}
+    console.log('DataManager: 无保存数据，使用默认');
+  },
+
+  save() {
+    const updates = WorldCupData.matches.map(m => ({
+      id: m.id, status: m.status, homeScore: m.homeScore, awayScore: m.awayScore
+    }));
+    try { localStorage.setItem('wc2026_saved', JSON.stringify(updates));
+    } catch(e) { console.warn('DataManager: 保存失败', e); }
+  },
+
+  updateMatch(id, status, homeScore, awayScore) {
+    const m = WorldCupData.matches.find(x => x.id === id);
+    if (!m) return false;
+    m.status = status;
+    m.homeScore = homeScore;
+    m.awayScore = awayScore;
+    this.save();
+    return true;
+  },
+
+  updateScore(id, homeScore, awayScore) {
+    return this.updateMatch(id, 'finished', homeScore, awayScore);
+  },
+
+  markLive(id, h, a) {
+    return this.updateMatch(id, 'live', h || 0, a || 0);
+  },
+
+  reset() {
+    localStorage.removeItem('wc2026_saved');
+    // Reload default scores
+    const oldMatches = JSON.parse(JSON.stringify(WorldCupData.matches));
+    WorldCupData.matches.length = 0;
+    // Restore by reloading page
+    location.reload();
+  },
+
+  exportJSON() {
+    return JSON.stringify(WorldCupData.matches.map(m => ({
+      id: m.id, status: m.status, homeScore: m.homeScore, awayScore: m.awayScore
+    })), null, 2);
+  }
+};
+
+DataManager.init();

@@ -686,3 +686,45 @@ img{max-width:100%}
   .modal{padding:18px}
   .compare-cards{grid-template-columns:1fr}
 }
+
+/* ===== Edit Mode ===== */
+.edit-btn{
+  padding:6px 12px;border-radius:20px;border:1px solid var(--border);
+  background:var(--card);color:var(--text-dim);cursor:pointer;
+  font-size:0.75rem;transition:all .2s;font-weight:600
+}
+.edit-btn:hover{color:var(--gold);border-color:var(--gold)}
+.edit-btn.active{background:rgba(46,204,113,0.15);color:var(--green);border-color:var(--green)}
+.edit-badge{
+  display:inline-block;margin-left:6px;font-size:0.7rem;
+  animation:pulse-glow 1.5s ease-in-out infinite
+}
+
+/* ===== Admin Panel ===== */
+.admin-table{font-size:0.8rem}
+.admin-table th{font-size:0.68rem;padding:6px 8px}
+.admin-table td{padding:5px 8px}
+.score-input{
+  background:var(--secondary);border:1px solid var(--border);
+  border-radius:4px;color:var(--text);font-size:0.85rem;
+  padding:4px 6px;transition:.2s;font-weight:600
+}
+.score-input:focus{outline:none;border-color:var(--gold)}
+.score-input-lg{font-size:1.2rem;padding:6px 8px;border-radius:6px;font-weight:700}
+.btn-small{padding:4px 12px;font-size:0.75rem;border-radius:6px}
+.btn-danger{background:linear-gradient(135deg,var(--red),#c0392b);color:#fff}
+.btn-danger:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(231,76,60,0.3)}
+
+/* ===== Live Match Highlight ===== */
+.match-card.live{border-left:3px solid var(--red);animation:livePulse 2s ease-in-out infinite}
+@keyframes livePulse{0%,100%{border-left-color:var(--red)}50%{border-left-color:rgba(231,76,60,0.3)}}
+
+/* ===== Toast ===== */
+#toast{pointer-events:none;white-space:nowrap}
+
+/* ===== Responsive Admin ===== */
+@media(max-width:768px){
+  .admin-table{font-size:0.7rem}
+  .admin-table td,.admin-table th{padding:3px 4px}
+  .score-input{width:28px!important;font-size:0.75rem}
+}
