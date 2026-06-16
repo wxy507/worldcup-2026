@@ -2,7 +2,7 @@
 // 2026 World Cup - Enhanced Application
 // ============================================================
 
-const App = {
+var App = {
   currentPage: "home",
   selectedTeam: null,
   predictions: {},
