@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026世界杯 · 预测中心</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+</head>
+<body>
+<div class="football-bg"></div>
+
+<!-- ===== Header ===== -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">🏆</div>
+    <span>2026世界杯</span>
+    <span style="font-weight:400;font-size:0.78rem;color:var(--text-dim);margin-left:2px">预测中心</span>
+  </div>
+  <div class="header-right">
+    <span id="todayDate" style="display:none"></span>
+    <span class="chip chip-gold" id="matchCountChip">0 场比赛</span>
+    <span class="chip chip-blue" id="liveCountChip">赛程已发布</span>
+    <div style="display:flex;gap:5px;align-items:center">
+      <div class="theme-btn gold active" data-theme="" title="金色主题"></div>
+      <div class="theme-btn blue" data-theme="blue" title="蓝色主题"></div>
+      <div class="theme-btn green" data-theme="green" title="绿色主题"></div>
+      <div class="theme-btn red" data-theme="red" title="红色主题"></div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Sidebar ===== -->
+<nav class="sidebar" id="sidebar">
+  <div class="nav-label">浏览</div>
+  <div class="nav-item active" data-page="home"><span class="icon">🏠</span><span>首页</span></div>
+  <div class="nav-item" data-page="matches"><span class="icon">⚽</span><span>比赛</span></div>
+  <div class="nav-item" data-page="standings"><span class="icon">📊</span><span>积分榜</span></div>
+  <div class="nav-item" data-page="teams"><span class="icon">🏳️</span><span>参赛球队</span></div>
+  <div class="nav-divider"></div>
+  <div class="nav-label">工具</div>
+  <div class="nav-item" data-page="predictions"><span class="icon">🔮</span><span>赛果预测</span></div>
+  <div class="nav-item" data-page="bracket"><span class="icon">🏆</span><span>淘汰赛</span></div>
+  <div class="nav-item" data-page="compare"><span class="icon">🆚</span><span>球队对比</span></div>
+  <div class="nav-item" data-page="calculator"><span class="icon">🧮</span><span>出线计算</span></div>
+  <div class="nav-item" data-page="calendar"><span class="icon">📅</span><span>赛程日历</span></div>
+  <div class="nav-divider"></div>
+  <div class="nav-label">资讯</div>
+  <div class="nav-item" data-page="news"><span class="icon">📰</span><span>新闻资讯</span></div>
+  <div class="nav-item" data-page="stats"><span class="icon">📈</span><span>数据统计</span></div>
+  <div class="nav-item" data-page="about"><span class="icon">ℹ️</span><span>关于</span></div>
+  <div class="nav-divider"></div>
+  <div class="nav-item" id="navSimulate"><span class="icon">🎮</span><span>AI模拟赛果</span></div>
+</nav>
+
+<!-- ===== Main ===== -->
+<main class="main" id="mainContent"></main>
+
+<!-- ===== News Modal ===== -->
+<div class="modal-overlay" id="newsModal">
+  <div class="modal">
+    <button class="close" onclick="closeNewsModal()">&times;</button>
+    <h2 id="modalTitle"></h2>
+    <div class="meta" id="modalMeta"></div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ===== Match / Player Modal ===== -->
+<div class="modal-overlay" id="matchModal">
+  <div class="modal">
+    <button class="close" onclick="closeMatchModal()">&times;</button>
+    <div id="matchModalContent"></div>
+  </div>
+</div>
+
+<div class="footer">🏆 2026 FIFA World Cup · 数据仅供娱乐参考 · Made with ❤️</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
