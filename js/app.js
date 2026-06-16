@@ -719,7 +719,7 @@ ${cats.map((c) => `<div class="tab-panel" id="tab-${c}" style="display:none"><di
     const gName = m.group ? `第${m.group}组` : "";
     return `<div class="${cls}" data-match="${m.id}">
   <div class="match-header">
-    <span>${m.date} ${m.time} · ${m.stadium}${editBadge}</span>
+    <span>${m.date} · ${m.stadium}${m.timeBJ ? " 🇨🇳 " + m.timeBJ : " " + m.time}${editBadge}</span>
     <span class="stage">${gName} ${m.stage}</span>
   </div>
   <div class="match-body">
@@ -1021,7 +1021,7 @@ ${cats.map((c) => `<div class="tab-panel" id="tab-${c}" style="display:none"><di
       <div style="font-size:2.2rem;font-weight:800;color:var(--gold)">${scoreDisplay}</div>
       <div style="text-align:center"><div style="font-size:3rem">${af}</div><div style="font-weight:700;margin-top:6px;font-size:1rem">${a}</div></div>
     </div>
-    <div style="color:var(--text-dim);font-size:0.82rem">${m.date} ${m.time} · ${m.stadium} · ${m.stage}</div>
+    <div style="color:var(--text-dim);font-size:0.82rem">${m.date} · ${m.stadium}${m.timeBJ ? " 🇨🇳 " + m.timeBJ : " " + m.time} · ${m.stage}</div>
   </div>
   <hr style="border-color:var(--border);margin:16px 0">
   <div style="font-size:0.88rem">
