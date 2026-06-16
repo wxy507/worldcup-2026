@@ -7,12 +7,19 @@ const App = {
   selectedTeam: null,
   predictions: {},
   simulated: false,
+  editMode: false,
 
   init() {
     this.renderDate();
     this.bindNav();
     this.bindTheme();
     this.loadPredictions();
+    this.addAdminNav();
+    // Restore edit mode button
+    if (this.editMode) {
+      const btn = document.getElementById("editModeBtn");
+      if (btn) { btn.classList.add("active"); btn.innerHTML = "✅ 完成编辑"; }
+    }
     this.addAdminNav();
     
     // Restore edit mode button state
@@ -79,6 +86,7 @@ const App = {
       case "news": main.innerHTML = this.newsPage(); break;
       case "stats": main.innerHTML = this.statsPage(); break;
       case "about": main.innerHTML = this.aboutPage(); break;
+      case "admin": main.innerHTML = this.adminPage(); break;
       case "admin": main.innerHTML = this.adminPage(); break;
       case "compare": main.innerHTML = this.comparePage(); break;
       case "calculator": main.innerHTML = this.calcPage(); break;
@@ -147,6 +155,28 @@ const App = {
           if (card && card.dataset.match) {
             this.showMatchEditor(card.dataset.match);
           }
+        });
+      });
+    }
+    // Admin tabs
+    document.querySelectorAll("#adminTabs .tab").forEach((t) => {
+      t.addEventListener("click", () => {
+        document.querySelectorAll("#adminTabs .tab").forEach((x) => x.classList.remove("active"));
+        t.classList.add("active");
+        document.querySelectorAll(".tab-panel").forEach((p) => p.style.display = "none");
+        const panel = document.getElementById("tab-" + t.dataset.tab);
+        if (panel) panel.style.display = "block";
+      });
+    });
+    // Edit mode - score click-to-edit
+    if (this.editMode) {
+      document.querySelectorAll(".match-card .score").forEach((el) => {
+        el.style.cursor = "pointer";
+        el.title = "点击编辑比分";
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const card = el.closest(".match-card");
+          if (card && card.dataset.match) this.showMatchEditor(card.dataset.match);
         });
       });
     }
@@ -1057,7 +1087,7 @@ ${cats.map((c) => `<div class="tab-panel" id="tab-${c}" style="display:none"><di
   // UTILITY
   // ============================================================
 
-  getUpcomingMatches(n) { return WorldCupData.matches.slice(0, n); },
+  getUpcomingMatches(n) { return [...WorldCupData.matches].sort((a,b) => a.date.localeCompare(b.date)).slice(0, n); },
 
   countdownDays() {
     const diff = Math.ceil((new Date("2026-06-11") - new Date()) / (86400000));
@@ -1065,8 +1095,9 @@ ${cats.map((c) => `<div class="tab-panel" id="tab-${c}" style="display:none"><di
   },
 
 
-  // ============================================================
-  // EDIT MODE - 编辑模式
+  // ============================================================,
+
+// EDIT MODE - 编辑模式
   // ============================================================
   editMode: false,
 
@@ -1394,7 +1425,400 @@ ${recent.length === 0 ? '<div class="empty">暂无可显示的比赛</div>' : ''
     t.style.transform = 'translateX(-50%) translateY(0)';
     clearTimeout(t._timer);
     t._timer = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2500);
-  }
+  },
+
+  // ============================================================
+  // EDIT MODE
+  // ============================================================
+  toggleEditMode() {
+    this.editMode = !this.editMode;
+    const btn = document.getElementById("editModeBtn");
+    if (btn) {
+      btn.classList.toggle("active", this.editMode);
+      btn.innerHTML = this.editMode ? "\u2705 \u5b8c\u6210\u7f16\u8f91" : "\u270f\ufe0f \u7f16\u8f91";
+    }
+    this.render();
+  },
+
+  addAdminNav() {
+    if (document.querySelector('.nav-item[data-page="admin"]')) return;
+    const sidebar = document.getElementById("sidebar");
+    const div = document.createElement("div");
+    div.className = "nav-divider";
+    sidebar.appendChild(div);
+    const label = document.createElement("div");
+    label.className = "nav-label";
+    label.textContent = "\u7ba1\u7406";
+    sidebar.appendChild(label);
+    const item = document.createElement("div");
+    item.className = "nav-item";
+    item.dataset.page = "admin";
+    item.innerHTML = '<span class="icon">\u2699\ufe0f</span><span>\u7ba1\u7406\u9762\u677f</span>';
+    item.addEventListener("click", () => this.navigate("admin"));
+    sidebar.appendChild(item);
+  },
+
+  // ============================================================
+  // ADMIN PAGE
+  // ============================================================
+  adminPage() {
+    return `<div class="section-header"><h2>\u2699\ufe0f \u7ba1\u7406\u9762\u677f</h2></div>
+<p class="l">\u7f16\u8f91\u6bd4\u8d5b\u6bd4\u5201\u3001\u72b6\u6001\u3001\u65b0\u95fb\u3002\u6240\u6709\u4fee\u6539\u81ea\u52a8\u4fdd\u5b58\u5230\u6d4f\u89c8\u5668\u3002</p>
+<div class="tabs" id="adminTabs">
+  <div class="tab active" data-tab="scores">\u5feb\u901f\u8bb0\u5206</div>
+  <div class="tab" data-tab="matches">\u8d5b\u7a0b\u7ba1\u7406</div>
+  <div class="tab" data-tab="news">\u65b0\u95fb\u7ba1\u7406</div>
+  <div class="tab" data-tab="data">\u6570\u636e\u7ba1\u7406</div>
+</div>
+<div class="tab-panel" id="tab-scores" style="display:block">${this.adminScoreBoard()}</div>
+<div class="tab-panel" id="tab-matches" style="display:none">${this.adminMatchTable()}</div>
+<div class="tab-panel" id="tab-news" style="display:none">${this.adminNewsEditor()}</div>
+<div class="tab-panel" id="tab-data" style="display:none">${this.adminDataTools()}</div>`;
+  },
+
+  adminScoreBoard() {
+    const today = new Date().toISOString().slice(0,10);
+    const todays = WorldCupData.matches.filter(m => m.date === today);
+    const recent = WorldCupData.matches.filter(m => m.status === "finished").slice(-10).reverse();
+    return `<h3 style="color:var(--gold);margin-bottom:12px">\ud83d\udcc5 \u4eca\u65e5\u6bd4\u8d5b (${todays.length}\u573a)</h3>
+<div class="card-grid card-grid-2">${todays.map(m => {
+  const hf = teamFlag(m.home); const af = teamFlag(m.away);
+  const hn = getTeamName(m.home); const an = getTeamName(m.away);
+  return `<div class="match-card" style="border-left:3px solid var(--red)">
+    <div><span style="font-weight:600">${hf} ${hn}</span>
+    <div style="display:flex;align-items:center;gap:8px;margin:8px 0">
+      <input type="number" min="0" max="20" class="score-input-lg" id="qs-${m.id}-h" value="${m.homeScore ?? 0}" style="width:45px;height:40px;font-size:1.2rem;text-align:center">
+      <span style="font-weight:800;font-size:1.3rem;color:var(--gold)">:</span>
+      <input type="number" min="0" max="20" class="score-input-lg" id="qs-${m.id}-a" value="${m.awayScore ?? 0}" style="width:45px;height:40px;font-size:1.2rem;text-align:center">
+    </div>
+    <span style="font-weight:600">${af} ${an}</span></div>
+    <div style="display:flex;gap:6px;margin-top:8px">
+      <button class="btn btn-small" onclick="App.saveScore('${m.id}')">\ud83d\udcbe \u4fdd\u5b58</button>
+      <button class="btn btn-small btn-secondary" onclick="App.endMatch('${m.id}')">\u23f1\ufe0f \u7ed3\u675f</button>
+    </div>
+  </div>`;
+}).join("")}
+${todays.length === 0 ? '<div class="empty">\u4eca\u65e5\u65e0\u6bd4\u8d5b</div>' : ""}</div>
+<h3 style="color:var(--gold);margin:20px 0 12px">\ud83d\udccb \u6700\u8fd1\u5df2\u5b8c\u8d5b</h3>
+<div class="card-grid card-grid-2">${recent.map(m => {
+  const hf = teamFlag(m.home); const af = teamFlag(m.away);
+  const hn = getTeamName(m.home); const an = getTeamName(m.away);
+  return `<div class="match-card finished no-click">
+    <div style="display:flex;align-items:center;gap:12px;justify-content:space-between">
+      <span>${hf} ${hn}</span>
+      <span style="font-size:1.3rem;font-weight:800;color:var(--gold)">${m.homeScore}:${m.awayScore}</span>
+      <span>${af} ${an}</span>
+    </div>
+    <div style="font-size:0.72rem;color:var(--text-dim);text-align:center">${m.date} \u00b7 ${m.stadium}</div>
+  </div>`;
+}).join("")}
+${recent.length === 0 ? '<div class="empty">\u6682\u65e0\u5df2\u5b8c\u8d5b\u6bd4\u8d5b</div>' : ""}</div>`;
+  },
+
+  saveScore(id) {
+    const h = parseInt(document.getElementById("qs-" + id + "-h").value);
+    const a = parseInt(document.getElementById("qs-" + id + "-a").value);
+    if (isNaN(h) || isNaN(a)) { alert("\u8bf7\u8f93\u5165\u6709\u6548\u6bd4\u5206"); return; }
+    DataManager.updateMatch(id, "live", h, a);
+    this.showToast("\u5df2\u4fdd\u5b58: " + id);
+    this.render();
+  },
+
+  endMatch(id) {
+    const h = parseInt(document.getElementById("qs-" + id + "-h").value);
+    const a = parseInt(document.getElementById("qs-" + id + "-a").value);
+    if (isNaN(h) || isNaN(a)) { alert("\u8bf7\u8f93\u5165\u6709\u6548\u6bd4\u5206"); return; }
+    DataManager.updateMatch(id, "finished", h, a);
+    this.showToast("\u6bd4\u8d5b\u7ed3\u675f: " + id + " " + h + "-" + a);
+    this.render();
+  },
+
+  adminMatchTable() {
+    const matches = WorldCupData.matches;
+    const sf = (s) => s === "scheduled" ? "\u5f85\u8d5b" : s === "live" ? "\ud83d\udd34 \u8fdb\u884c\u4e2d" : "\u2705 \u5df2\u7ed3\u675f";
+    // Group matches by date
+    const byDate = {};
+    matches.forEach(m => {
+      if (!byDate[m.date]) byDate[m.date] = [];
+      byDate[m.date].push(m);
+    });
+    const sortedDates = Object.keys(byDate).sort();
+    return `<div style="margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+  <button class="btn" onclick="App.showAddMatchModal()" style="padding:6px 14px;font-size:0.8rem">\u2795 \u6dfb\u52a0\u6bd4\u8d5b</button>
+  <button class="btn btn-secondary" onclick="App.bulkClearScores()" style="padding:6px 14px;font-size:0.8rem">\ud83d\udd04 \u91cd\u7f6e\u6240\u6709\u6bd4\u5206</button>
+  <span style="color:var(--text-dim);font-size:0.78rem">\u5171 ${matches.length} \u573a</span>
+</div>
+<div style="overflow-x:auto;max-height:500px;overflow-y:auto">
+<table class="group-table admin-table">
+  <tr><th>#</th><th>ID</th><th>\u65e5\u671f</th><th>\u65f6\u95f4</th><th>\u4e3b\u961f</th><th style="width:90px">\u6bd4\u5206</th><th>\u5ba2\u961f</th><th>\u72b6\u6001</th><th style="width:50px">\u64cd\u4f5c</th></tr>
+  ${sortedDates.map(d => {
+    const ms = byDate[d];
+    // Date header
+    const dateHeader = `<tr style="background:var(--accent)"><td colspan="9" style="font-weight:600;color:var(--gold);font-size:0.78rem;padding:6px 10px">${d}</td></tr>`;
+    return dateHeader + ms.map((m, idx) => {
+      const hf = teamFlag(m.home); const af = teamFlag(m.away);
+      const hn = getTeamName(m.home); const an = getTeamName(m.away);
+      return `<tr>
+        <td style="color:var(--text-dim);font-size:0.7rem">${idx+1}</td>
+        <td style="font-size:0.7rem;color:var(--text-dim)">${m.id}</td>
+        <td><input type="date" id="amd-${m.id}" value="${m.date}" style="width:100px;font-size:0.7rem;padding:2px 4px;background:var(--secondary);border:1px solid var(--border);border-radius:3px;color:var(--text)"></td>
+        <td><input type="time" id="amt-${m.id}" value="${m.time}" style="width:65px;font-size:0.7rem;padding:2px 4px;background:var(--secondary);border:1px solid var(--border);border-radius:3px;color:var(--text)"></td>
+        <td style="font-size:0.75rem">${hf} ${hn}</td>
+        <td style="text-align:center"><input type="number" min="0" max="20" id="amh-${m.id}" value="${m.homeScore !== null ? m.homeScore : ''}" placeholder="-" style="width:28px;font-size:0.75rem;text-align:center;padding:2px;background:var(--secondary);border:1px solid var(--border);border-radius:3px;color:var(--gold);font-weight:700">
+        <span style="color:var(--text-dim);margin:0 2px">-</span>
+        <input type="number" min="0" max="20" id="ama-${m.id}" value="${m.awayScore !== null ? m.awayScore : ''}" placeholder="-" style="width:28px;font-size:0.75rem;text-align:center;padding:2px;background:var(--secondary);border:1px solid var(--border);border-radius:3px;color:var(--gold);font-weight:700"></td>
+        <td style="font-size:0.75rem">${af} ${an}</td>
+        <td><select id="ams-${m.id}" style="font-size:0.65rem;padding:2px;background:var(--secondary);border:1px solid var(--border);border-radius:3px;color:var(--text)">
+          <option value="scheduled" ${m.status==="scheduled"?"selected":""}>\u5f85\u8d5b</option>
+          <option value="live" ${m.status==="live"?"selected":""}>\u8fdb\u884c\u4e2d</option>
+          <option value="finished" ${m.status==="finished"?"selected":""}>\u5df2\u7ed3\u675f</option>
+        </select></td>
+        <td><button class="btn btn-small" onclick="App.saveMatch('${m.id}')" style="padding:2px 6px;font-size:0.6rem;min-width:30px">\ud83d\udcbe</button></td>
+      </tr>`;
+    }).join("");
+  }).join("")}
+</table></div>
+<div style="margin-top:10px;display:flex;gap:8px">
+  <button class="btn" onclick="App.saveAllMatches()" style="font-size:0.8rem">\ud83d\udcbe \u4fdd\u5b58\u5168\u90e8</button>
+  <button class="btn btn-secondary" onclick="App.render()" style="font-size:0.8rem">\ud83d\udd04 \u5237\u65b0</button>
+</div>`;
+  },
+
+  saveMatch(id) {
+    const d = document.getElementById("amd-" + id)?.value;
+    const t = document.getElementById("amt-" + id)?.value;
+    const h = parseInt(document.getElementById("amh-" + id)?.value);
+    const a = parseInt(document.getElementById("ama-" + id)?.value);
+    const s = document.getElementById("ams-" + id)?.value;
+    const m = WorldCupData.matches.find(x => x.id === id);
+    if (!m) return;
+    if (d) m.date = d;
+    if (t) m.time = t;
+    m.status = s || m.status;
+    if (!isNaN(h) && !isNaN(a)) { m.homeScore = h; m.awayScore = a; }
+    DataManager.save();
+    this.showToast("\u5df2\u4fdd\u5b58");
+    this.render();
+  },
+
+  saveAllMatches() {
+    let n = 0;
+    WorldCupData.matches.forEach(m => {
+      const d = document.getElementById("amd-" + m.id)?.value;
+      const t = document.getElementById("amt-" + m.id)?.value;
+      const h = parseInt(document.getElementById("amh-" + m.id)?.value);
+      const a = parseInt(document.getElementById("ama-" + m.id)?.value);
+      const s = document.getElementById("ams-" + m.id)?.value;
+      if (d) m.date = d;
+      if (t) m.time = t;
+      if (s) m.status = s;
+      if (!isNaN(h) && !isNaN(a)) { m.homeScore = h; m.awayScore = a; }
+      n++;
+    });
+    DataManager.save();
+    this.showToast("\u5df2\u4fdd\u5b58 " + n + " \u573a");
+    this.render();
+  },
+
+  showAddMatchModal() {
+    const teams = Object.keys(WorldCupData.teams).sort();
+    const teamOpts = teams.map(t => `<option value="${t}">${WorldCupData.teams[t].name}</option>`).join("");
+    const groups = WorldCupData.groups.map(g => `<option value="${g.id}">${g.name}</option>`).join("");
+    const venues = [
+      "Estadio Azteca (\u58a8\u897f\u54e5\u57ce)","Estadio BBVA (\u8499\u7279\u96f7)","Estadio Akron (\u74dc\u8fbe\u62c9\u54c8\u62c9)",
+      "SoFi\u4f53\u80b2\u573a (\u6d1b\u6749\u77f6)","\u674e\u7ef4\u65af\u4f53\u80b2\u573a (\u65e7\u91d1\u5c71)","\u6d41\u660e\u4f53\u80b2\u573a (\u897f\u96c5\u56fe)",
+      "AT&T\u4f53\u80b2\u573a (\u8fbe\u62c9\u65af)","NRG\u4f53\u80b2\u573a (\u4f11\u65af\u6566)","\u7bad\u5934\u4f53\u80b2\u573a (\u582a\u8428\u65af\u57ce)",
+      "\u6885\u8d5b\u5fb7\u65af-\u5954\u9a70\u4f53\u80b2\u573a (\u4e9a\u7279\u5170\u5927)","\u786c\u77f3\u4f53\u80b2\u573a (\u8fc8\u963f\u5bc6)","\u5927\u90fd\u4f1a\u4f53\u80b2\u573a (\u7ebd\u7ea6)",
+      "\u6797\u80af\u91d1\u878d\u4f53\u80b2\u573a (\u8d39\u57ce)","\u5409\u5217\u4f53\u80b2\u573a (\u6ce2\u58eb\u987f)","BC Place (\u6e29\u54e5\u534e)","BMO\u4f53\u80b2\u573a (\u591a\u4f26\u591a)"
+    ];
+    const venueOpts = venues.map(v => `<option value="${v}">${v}</option>`).join("");
+    const nextId = "M" + (WorldCupData.matches.length + 1);
+    document.getElementById("matchModalContent").innerHTML = `
+      <h2>\u2795 \u6dfb\u52a0\u65b0\u6bd4\u8d5b</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">ID</label><br><input id="nm-id" value="${nextId}" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)"></div>
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">\u5c0f\u7ec4</label><br><select id="nm-group" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)">${groups}</select></div>
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">\u65e5\u671f</label><br><input type="date" id="nm-date" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)"></div>
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">\u65f6\u95f4</label><br><input type="time" id="nm-time" value="18:00" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)"></div>
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">\u4e3b\u961f</label><br><select id="nm-home" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)">${teamOpts}</select></div>
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">\u5ba2\u961f</label><br><select id="nm-away" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)">${teamOpts}</select></div>
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">\u573a\u9986</label><br><select id="nm-stadium" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)">${venueOpts}</select></div>
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">\u72b6\u6001</label><br><select id="nm-status" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)">
+          <option value="scheduled">\u5f85\u8d5b</option><option value="live">\u8fdb\u884c\u4e2d</option><option value="finished">\u5df2\u7ed3\u675f</option></select></div>
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">\u4e3b\u961f\u8fdb\u7403</label><br><input type="number" min="0" id="nm-hs" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)"></div>
+        <div><label style="font-size:0.75rem;color:var(--text-dim)">\u5ba2\u961f\u8fdb\u7403</label><br><input type="number" min="0" id="nm-as" style="width:100%;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)"></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:14px">
+        <button class="btn" onclick="App.confirmAddMatch()">\u2795 \u6dfb\u52a0</button>
+        <button class="btn btn-secondary" onclick="closeMatchModal()">\u53d6\u6d88</button>
+      </div>
+    `;
+    document.getElementById("matchModal").classList.add("show");
+  },
+
+  confirmAddMatch() {
+    const id = document.getElementById("nm-id").value.trim();
+    if (!id || WorldCupData.matches.find(m => m.id === id)) { alert("ID\u65e0\u6548\u6216\u5df2\u5b58\u5728"); return; }
+    const hs = parseInt(document.getElementById("nm-hs").value);
+    const as = parseInt(document.getElementById("nm-as").value);
+    const newMatch = {
+      id, group: document.getElementById("nm-group").value,
+      date: document.getElementById("nm-date").value,
+      time: document.getElementById("nm-time").value,
+      home: document.getElementById("nm-home").value,
+      away: document.getElementById("nm-away").value,
+      stadium: document.getElementById("nm-stadium").value,
+      stage: "\u5c0f\u7ec4\u8d5b",
+      status: document.getElementById("nm-status").value,
+      homeScore: !isNaN(hs) ? hs : null,
+      awayScore: !isNaN(as) ? as : null
+    };
+    WorldCupData.matches.push(newMatch);
+    DataManager.save();
+    this.showToast("\u5df2\u6dfb\u52a0: " + id);
+    closeMatchModal();
+    this.render();
+  },
+
+  bulkClearScores() {
+    if (!confirm("\u786e\u5b9a\u91cd\u7f6e\u6240\u6709\u6bd4\u5206\u5417\uff1f")) return;
+    WorldCupData.matches.forEach(m => { m.status = "scheduled"; m.homeScore = null; m.awayScore = null; });
+    DataManager.save();
+    this.showToast("\u5df2\u91cd\u7f6e\u6240\u6709\u6bd4\u5206");
+    this.render();
+  },
+
+  adminNewsEditor() {
+    const news = getNews();
+    return `<h3 style="color:var(--gold);margin-bottom:12px">\u2795 \u6dfb\u52a0\u65b0\u95fb</h3>
+<div style="background:var(--card);padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:16px">
+  <input id="newsTitle" placeholder="\u65b0\u95fb\u6807\u9898" style="width:100%;padding:8px;margin-bottom:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)">
+  <textarea id="newsContent" placeholder="\u5185\u5bb9" rows="3" style="width:100%;padding:8px;margin-bottom:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text);resize:vertical"></textarea>
+  <div style="display:flex;gap:6px">
+    <input id="newsCategory" placeholder="\u5206\u7c7b" style="flex:1;padding:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text)">
+    <button class="btn" onclick="App.addNews()" style="padding:6px 16px;font-size:0.8rem">\ud83d\udcf0 \u53d1\u5e03</button>
+  </div>
+</div>
+<h3 style="color:var(--gold);margin-bottom:12px">\u5df2\u6709\u65b0\u95fb (${news.length})\u6761</h3>
+<div class="card-grid card-grid-2">${news.map(n => `<div class="news-card"><span class="category">${n.category}</span><h3>${n.title}</h3><p>${n.summary}</p><div class="date">${n.date}</div></div>`).join("")}</div>`;
+  },
+
+  addNews() {
+    const title = document.getElementById("newsTitle").value.trim();
+    const content = document.getElementById("newsContent").value.trim();
+    const category = document.getElementById("newsCategory").value.trim() || "\u6700\u65b0\u6d88\u606f";
+    if (!title) { alert("\u8bf7\u8f93\u5165\u6807\u9898"); return; }
+    DataManager.addNews({ id: "n" + Date.now(), title, content, summary: content.substring(0, 100), category, date: new Date().toISOString().slice(0,10), image: null });
+    this.showToast("\u65b0\u95fb\u5df2\u53d1\u5e03");
+    this.render();
+  },
+
+  adminDataTools() {
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div class="match-card no-click" style="cursor:default">
+    <h4 style="color:var(--gold);margin-bottom:8px">\ud83d\udce4 \u5bfc\u51fa\u6570\u636e</h4>
+    <button class="btn" onclick="App.exportData()">\ud83d\udce4 \u5bfc\u51faJSON</button>
+  </div>
+  <div class="match-card no-click" style="cursor:default">
+    <h4 style="color:var(--gold);margin-bottom:8px">\ud83d\udce5 \u5bfc\u5165\u6570\u636e</h4>
+    <textarea id="importData" placeholder="\u7c98\u8d34JSON\u6570\u636e..." rows="3" style="width:100%;padding:6px;margin-bottom:6px;background:var(--secondary);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:0.75rem;font-family:monospace"></textarea>
+    <button class="btn btn-secondary" onclick="App.importData()">\ud83d\udce5 \u5bfc\u5165</button>
+  </div>
+  <div class="match-card no-click" style="cursor:default">
+    <h4 style="color:var(--gold);margin-bottom:8px">\ud83d\udd04 \u91cd\u7f6e\u6570\u636e</h4>
+    <button class="btn btn-danger" onclick="App.resetData()">\u26a0\ufe0f \u91cd\u7f6e</button>
+  </div>
+  <div class="match-card no-click" style="cursor:default">
+    <h4 style="color:var(--gold);margin-bottom:8px">\u8bf4\u660e</h4>
+    <p class="l" style="font-size:0.78rem">\u6240\u6709\u4fee\u6539\u81ea\u52a8\u4fdd\u5b58\u5230\u6d4f\u89c8\u5668\uff0c\u5237\u65b0\u4e0d\u4e22\u5931\u3002\u91cd\u7f6e\u540e\u9700\u8981\u91cd\u65b0\u52a0\u8f7d\u9875\u9762\u3002</p>
+  </div>
+</div>`;
+  },
+
+  exportData() {
+    const json = DataManager.exportJSON();
+    const blob = new Blob([json], {type: "application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "wc2026_data_" + new Date().toISOString().slice(0,10) + ".json";
+    a.click();
+    this.showToast("\u5df2\u5bfc\u51fa");
+  },
+
+  importData() {
+    const json = document.getElementById("importData").value.trim();
+    if (!json) { alert("\u8bf7\u7c98\u8d34JSON\u6570\u636e"); return; }
+    if (DataManager.importJSON(json)) {
+      this.showToast("\u5df2\u5bfc\u5165");
+      location.reload();
+    } else {
+      alert("\u683c\u5f0f\u9519\u8bef");
+    }
+  },
+
+  resetData() {
+    if (confirm("\u786e\u5b9a\u91cd\u7f6e\u6240\u6709\u6570\u636e\uff1f")) {
+      DataManager.reset();
+    }
+  },
+
+  // ============================================================
+  // MATCH EDITOR MODAL
+  // ============================================================
+  showMatchEditor(id) {
+    const m = WorldCupData.matches.find(x => x.id === id);
+    if (!m) return;
+    const hf = teamFlag(m.home); const af = teamFlag(m.away);
+    const hn = getTeamName(m.home); const an = getTeamName(m.away);
+    document.getElementById("matchModalContent").innerHTML = `
+      <h2 style="margin-bottom:16px">\u270f\ufe0f \u7f16\u8f91\u6bd4\u5206: ${hf} ${hn} vs ${an} ${af}</h2>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0">
+        <div style="text-align:center;font-size:2rem">${hf}<br><span style="font-size:0.85rem">${hn}</span></div>
+        <div><input type="number" min="0" max="20" id="edit-hs" value="${m.homeScore ?? 0}" style="width:50px;height:44px;font-size:1.4rem;text-align:center;background:var(--secondary);border:2px solid var(--gold);border-radius:6px;color:var(--gold);font-weight:800"></div>
+        <div style="font-size:1.5rem;font-weight:800;color:var(--text-dim)">:</div>
+        <div><input type="number" min="0" max="20" id="edit-as" value="${m.awayScore ?? 0}" style="width:50px;height:44px;font-size:1.4rem;text-align:center;background:var(--secondary);border:2px solid var(--gold);border-radius:6px;color:var(--gold);font-weight:800"></div>
+        <div style="text-align:center;font-size:2rem">${af}<br><span style="font-size:0.85rem">${an}</span></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn" onclick="App.confirmEdit('${m.id}')">\ud83d\udcbe \u4fdd\u5b58</button>
+        <button class="btn btn-secondary" onclick="DataManager.updateMatch('${m.id}','finished',0,0);closeMatchModal();App.showToast('0-0 \u5df2\u4fdd\u5b58');App.render()">\ud83d\udd04 \u8bbe\u4e3a0-0</button>
+        <button class="btn btn-secondary" onclick="closeMatchModal();App.showToast('\u5df2\u53d6\u6d88')">\u53d6\u6d88</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+        <button class="btn btn-secondary" onclick="DataManager.updateMatch('${m.id}','live',${m.homeScore ?? 0},${m.awayScore ?? 0});closeMatchModal();App.showToast('\u5df2\u6807\u8bb0\u4e3a\u8fdb\u884c\u4e2d');App.render()">\ud83d\udd34 \u8fdb\u884c\u4e2d</button>
+        <button class="btn btn-secondary" onclick="DataManager.updateMatch('${m.id}','scheduled',null,null);closeMatchModal();App.showToast('\u5df2\u6807\u8bb0\u4e3a\u5f85\u8d5b');App.render()">\ud83d\udcc5 \u5f85\u8d5b</button>
+      </div>
+    `;
+    document.getElementById("matchModal").classList.add("show");
+  },
+
+  confirmEdit(id) {
+    const h = parseInt(document.getElementById("edit-hs").value);
+    const a = parseInt(document.getElementById("edit-as").value);
+    if (isNaN(h) || isNaN(a)) { alert("\u8bf7\u8f93\u5165\u6709\u6548\u6bd4\u5206"); return; }
+    DataManager.updateMatch(id, "finished", h, a);
+    this.showToast("\u6bd4\u5206\u5df2\u4fdd\u5b58: " + h + "-" + a);
+    closeMatchModal();
+    this.render();
+  },
+
+  // ============================================================
+  // TOAST
+  // ============================================================
+  showToast(msg) {
+    let t = document.getElementById("toast");
+    if (!t) {
+      t = document.createElement("div");
+      t.id = "toast";
+      t.style.cssText = "position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--primary);padding:10px 24px;border-radius:30px;font-weight:700;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,0.4);transition:all .3s;opacity:0;font-size:0.85rem";
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = "1";
+    t.style.transform = "translateX(-50%) translateY(0)";
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.style.opacity = "0"; t.style.transform = "translateX(-50%) translateY(20px)"; }, 2500);
+  },
 };
 
 function closeNewsModal() { document.getElementById("newsModal").classList.remove("show"); }
